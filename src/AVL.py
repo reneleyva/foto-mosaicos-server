@@ -1,6 +1,4 @@
 # coding=utf-8
-#import random, math
-# import pdb
 import time
 from PIL import Image
 
@@ -480,9 +478,7 @@ class AVLTree():
         if not point_list :
             return
         # Para comparaciones solamente.
-        start_time = time.time()
         # Insertamos en el árbol los puntos.
-        # map(lambda punto: self.insert(punto), point_list)
         for point in point_list:
             self.insert(point)
         # Llenamos las hojas que representarán nuestros puntos. (Como en el de rangos)
@@ -495,7 +491,6 @@ class AVLTree():
         # Llenamos los árboles asocidados para cada dimensión.
         self.fillAssocTrees(dimensiones)
         # Comparaciones solamente.
-        print("Tardo: --- %s segundos para construir el árbol con %s elementos" % (time.time() - start_time, len(point_list)))
 
     # Lee la "base de datos" de las imagenes, y genera su árbol de rangos.
     def fillImageDB (self,BD):
@@ -509,8 +504,10 @@ class AVLTree():
             nombre = arr[0]
             R = int(arr[1]) 
             G = int(arr[2]) 
-            B = int(arr[3]) 
-            RGB = (R,G,B,nombre)
+            B = int(arr[3])
+            img = Image.open(nombre)
+            img = img.resize((20,20))
+            RGB = (R,G,B,nombre,img)
             # Lo metemos a la lista
             images.append(RGB)
         file.close()

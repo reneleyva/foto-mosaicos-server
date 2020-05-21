@@ -1,11 +1,7 @@
 # coding=utf-8
 from PIL import Image
 import os
-
-# Explicar por que no tube elecsion
-# Variables globales.
-# La base da datos donde se guardarán los promedios de cada imagen.
-BD = "BD.txt"
+BD = os.environ.get("BD_TXT_PATH")
 f = None
 
 # Obtiene el promedio general de (R,G,B) de toda la imagen.
@@ -43,24 +39,24 @@ def getPromedioRGB(img):
     return str(r_prom) + ","+ str(g_prom) + ","+ str(b_prom)
 
 # Itera sobre la carpeta con imágenes para obtener su color promedio.
-def getPromedios (directorio):
-    print(directorio)
+def getPromedios (path):
     global BD,f
     # Una ""Base de Datos"" para guardar el nombre de la imagen y su color promedio en RGB.
-    for filename in os.listdir(directorio):
+    for filename in os.listdir(path):
         if filename.endswith(".jpg") or filename.endswith(".JPG") or filename.endswith(".png") or filename.endswith(".jpeg"):
             im = None
             try:
-                im = Image.open(directorio + "/" + filename)
+                im = Image.open(path + filename)
             except Exception as e:
                 continue
             
             prom = getPromedioRGB(im) 
             if prom:    
-                f.write(directorio+"/"+filename + "," + prom  + "\n")
-        elif os.path.isdir(directorio+"/"+filename):
-            print("Directorio acutal: " + filename)
-            getPromedios(directorio+"/"+filename)
+                f.write(path + filename + "," + prom  + "\n")
+        elif os.path.isdir(path + filename):
+            print("Directorio actual: " + filename)
+            getPromedios(path + filename + "/")
+
 
 # Dada una carpeta raíz, saca el promedio de todas las imágenes contenidas en él.
 def main():
@@ -68,11 +64,10 @@ def main():
     global f
     # Abrimos el archivo.
     f = open(BD,"w+")
-    # directory = input("Dame la ruta del directorio raiz \n")
-    directory = "./img"
+    directory = os.environ.get("IMAGE_FOLDER_PATH")
     getPromedios(directory)
     f.close()
+    print("Programa finalizado")
 
 if __name__ == '__main__':
     main()
-# Macintosh HD⁩/Usuarios⁩/⁨luispulido⁩/⁨Documentos/Imagenes⁩

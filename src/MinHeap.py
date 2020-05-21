@@ -37,10 +37,3 @@ class Heap(object):
 
     def __len__(self):
         return len(self.heap)
-
-if __name__ == '__main__':
-    # Pruebas.
-    li = [[1,"a"], [2,"c"], [3,"b"], [4,"e"], [5,"d"], [6,"f"], [7,"g"], [8,"h"], [9,"i"], [10,"j"]]
-    heap = Heap(li)
-    print(heap.getNSmallest())
-

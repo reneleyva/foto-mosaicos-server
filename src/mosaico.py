@@ -2,9 +2,9 @@
 from PIL import Image
 import os
 # Min Heap
-from MinHeap import Heap
+from .MinHeap import Heap
 # Árbol de rangos.
-from AVL import AVLTree
+from .AVL import AVLTree
 import random
 
 # Dado un color promedio, regresa la ruta de la imagen cuyo color promedio es el más cercano a ese color.
@@ -20,12 +20,13 @@ def getClosestImage (RGB,tree):
     points = []
     for i in range(len(nearest_points)):
         # Los colores
-        RGB2 = nearest_points[i][:-1]
+        RGB2 = nearest_points[i][:-2]
         # La ruta
-        name = nearest_points[i][-1]
+        name = nearest_points[i][-2]
+        img = nearest_points[i][-1]
         # Sacamos la distancia del punto actual, con el que buscamos.
         distance = getDistance(RGB,RGB2)
-        points.append([distance,name])
+        points.append([distance,name,img])
     # Metemos los puntos a un montículo mínimo
     heap = Heap(points)
     # Lo regresamos a lista y regresamos los primeros n elementos (los mejores.)
@@ -108,22 +109,18 @@ def filtroMosaico(imagen,mosaicoX,mosaicoY,tree):
             index = random.randint(0, len(heap)-1)
             path = heap[index][1] 
             # Lo pegamos al mosaico
-            img = Image.open(path)
-            img = img.resize((mosaicoX*tam,mosaicoY*tam))
+            img = heap[index][2]
             new_im.paste(img, (i*tam,j*tam))
-
-    new_im.save("Result.jpg")
+    path = os.environ.get("NEW_IMAGE_PATH")
+    new_im.save(path)
 
     return new_im
 
+def process_image (img, tree):
+    tam_mosaico = 10
+    print("Creando Mosaico... ")
+    mosaico = filtroMosaico(img,tam_mosaico,tam_mosaico,tree)
+    print("Tarea finalizada")
+    return mosaico
 
-if __name__ == '__main__':
-    tree = AVLTree()
-    # Lo llenamos con la información preprocesada.
-    tree.fillImageDB("BD.txt")
-    nombre_imagen = "image.png"
-    tam_mosaico = int(input("El tamaño del mosaico: "))
-    img = Image.open (nombre_imagen)
-    print("Creando Mosaico...")
-    filtroMosaico(img,tam_mosaico,tam_mosaico,tree)
-
+    
