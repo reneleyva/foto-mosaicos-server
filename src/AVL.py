@@ -1,5 +1,6 @@
 # coding=utf-8
 import time
+import os
 from PIL import Image
 
 outputdebug = False 
@@ -13,8 +14,6 @@ def debug(msg):
 class Node():
     def __init__(self,points,dimension=0):
         self.left = None 
-        self.right = None
-        # Adaptación del Duis.
         # Árbol asociado a ese nodo T(v).
         self.assoc_tree = None
         # En lugar de almacenar un punto, almacenará una lista de puntos.
@@ -493,8 +492,9 @@ class AVLTree():
         # Comparaciones solamente.
 
     # Lee la "base de datos" de las imagenes, y genera su árbol de rangos.
-    def fillImageDB (self,BD):
+    def fillImageDB (self,size):
         images = []
+        BD = os.environ.get("BD_TXT_PATH")
 
         file = open(BD,"r")
         for line in file.readlines():
@@ -506,7 +506,7 @@ class AVLTree():
             G = int(arr[2]) 
             B = int(arr[3])
             img = Image.open(nombre)
-            img = img.resize((20,20))
+            img = img.resize((2*size,2*size))
             RGB = (R,G,B,nombre,img)
             # Lo metemos a la lista
             images.append(RGB)

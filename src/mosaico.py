@@ -1,9 +1,7 @@
 # coding=utf-8
 from PIL import Image
 import os
-# Min Heap
 from .MinHeap import Heap
-# Árbol de rangos.
 from .AVL import AVLTree
 import random
 
@@ -56,7 +54,7 @@ def formatt (RGB,epsilon=1):
 
 # Dada una imágen, y el tamaño del mosaico crea el foto mosaico.
 # La guarda con el nombre que recibe (name).
-def filtroMosaico(imagen,mosaicoX,mosaicoY,tree):
+def filtroMosaico(imagen,tree,mosaic_size):
     # Variables auxiliares.
     recorreX = 0
     recorreY = 0
@@ -70,13 +68,14 @@ def filtroMosaico(imagen,mosaicoX,mosaicoY,tree):
     pixels = imagen.load()
     old_RGB = []
     # Para ajustar el tamaño de la imagen.
-    tam = 2 # Pendiente
+    escale = int(os.environ.get("ESCALE"))
+    # mosaic_size = int(os.environ.get("DEFAULT_MOSAIC_SIZE"))
     # La imagen que será el mosaico.
-    new_im = Image.new('RGB', (ancho*tam, alto*tam))
-    for i in range(0,ancho,mosaicoX):
-        recorreX = i + mosaicoX
-        for j in range(0,alto,mosaicoY):
-            recorreY = j + mosaicoY
+    new_im = Image.new('RGB', (ancho*escale, alto*escale))
+    for i in range(0,ancho,mosaic_size):
+        recorreX = i + mosaic_size
+        for j in range(0,alto,mosaic_size):
+            recorreY = j + mosaic_size
             for k in range(i,recorreX):
                 if (k >= ancho):
                     break
@@ -107,19 +106,18 @@ def filtroMosaico(imagen,mosaicoX,mosaicoY,tree):
                 heap = getClosestImage(RGB,tree)
             # Elegimos una posición aleatoria de nuestro arreglo.
             index = random.randint(0, len(heap)-1)
-            path = heap[index][1] 
+            # path = heap[index][1] 
             # Lo pegamos al mosaico
             img = heap[index][2]
-            new_im.paste(img, (i*tam,j*tam))
+            new_im.paste(img, (i*escale,j*escale))
     path = os.environ.get("NEW_IMAGE_PATH")
     new_im.save(path)
 
     return new_im
 
-def process_image (img, tree):
-    tam_mosaico = 10
+def process_image (img, tree,mosaic_size):
     print("Creando Mosaico... ")
-    mosaico = filtroMosaico(img,tam_mosaico,tam_mosaico,tree)
+    mosaico = filtroMosaico(img,tree,mosaic_size)
     print("Tarea finalizada")
     return mosaico
 
