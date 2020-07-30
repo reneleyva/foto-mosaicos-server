@@ -2,6 +2,8 @@
 import time
 import os
 from PIL import Image
+import requests
+from io import BytesIO
 
 outputdebug = False 
 
@@ -384,7 +386,6 @@ class AVLTree():
     # Parametros es la lista que contiene [x:x'],[y:y'] y [z:z'] en nuestro caso.
     def getNearestPoints(self,params=[]):
         if not params:
-            print("No hay parametros")
             return []
         # Los valores de búsqueda.
         v1,v2 = params[0]
@@ -464,7 +465,7 @@ class AVLTree():
                 else:
                     puntos += self.node.left.node.assoc_tree.getNearestPoints(p)
             # Si tiene hijo derecho
-            if self.node.hasRightChild(): # Estoy casi seguro que casi siempre se cumple
+            if self.node.hasRightChild():
                 puntos += self.node.right.getRightLeftSubTrees(x,p)
             return puntos
         # Si no se cumple, nos vamos a su hijo izquierdo si es que tiene.
@@ -494,7 +495,8 @@ class AVLTree():
     # Lee la "base de datos" de las imagenes, y genera su árbol de rangos.
     def fillImageDB (self,size):
         images = []
-        BD = os.environ.get("BD_TXT_PATH")
+
+        BD = "./src/BD.txt" #TODO: Replace it!
 
         file = open(BD,"r")
         for line in file.readlines():
@@ -505,29 +507,12 @@ class AVLTree():
             R = int(arr[1]) 
             G = int(arr[2]) 
             B = int(arr[3])
-            img = Image.open(nombre)
-            img = img.resize((2*size,2*size))
+            response = requests.get(nombre)
+            img = Image.open(BytesIO(response.content))
+            img = img.resize((size,size))
             RGB = (R,G,B,nombre,img)
             # Lo metemos a la lista
             images.append(RGB)
         file.close()
         # Creamos el árbol.
         self.fillTree(images)
-
-    # Búsqueda lineal de puntos.
-    def busquedaLineal(self,point_list=[],search_range = []):
-        points = []
-        cumple = True
-        # Recorremos la lista linealmente.
-        for i in range(len(point_list)):
-            for j in range(0,len(point_list[i])-1):
-                # Si no entra en el rango
-                if not (search_range[j][0] <= point_list[i][j] and search_range[j][1] >= point_list[i][j]):
-                    cumple = False
-                    break
-            # Si sí cumplió los rangos
-            if cumple:
-                points.append(point_list[i])
-            # Reiniciamos el valor.
-            cumple = True
-        return points

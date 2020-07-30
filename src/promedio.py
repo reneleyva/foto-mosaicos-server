@@ -1,8 +1,11 @@
 # coding=utf-8
+from cloudinary.api import resources
 from PIL import Image
+import requests
+from io import BytesIO
 import os
-BD = os.environ.get("BD_TXT_PATH")
-f = None
+
+
 
 # Obtiene el promedio general de (R,G,B) de toda la imagen.
 def getPromedioRGB(img):
@@ -40,7 +43,7 @@ def getPromedioRGB(img):
 
 # Itera sobre la carpeta con imágenes para obtener su color promedio.
 def getPromedios (path):
-    global BD,f
+    f = open("./src/BD.txt","w+")
     # Una ""Base de Datos"" para guardar el nombre de la imagen y su color promedio en RGB.
     for filename in os.listdir(path):
         if filename.endswith(".jpg") or filename.endswith(".JPG") or filename.endswith(".png") or filename.endswith(".jpeg"):
@@ -56,18 +59,30 @@ def getPromedios (path):
         elif os.path.isdir(path + filename):
             print("Directorio actual: " + filename)
             getPromedios(path + filename + "/")
-
-
-# Dada una carpeta raíz, saca el promedio de todas las imágenes contenidas en él.
-def main():
-    print("Comienza...")
-    global f
-    # Abrimos el archivo.
-    f = open(BD,"w+")
-    directory = os.environ.get("IMAGE_FOLDER_PATH")
-    getPromedios(directory)
     f.close()
-    print("Programa finalizado")
 
-if __name__ == '__main__':
-    main()
+def fill_db():
+
+    f = open("./src/BD.txt","w+")
+    response = resources(type = "upload", max_results=5000)
+    
+    for item in response.get("resources"):
+
+        if item.get("bytes", 0) > 0:
+
+            img = None
+
+            try:
+                img_bytes = requests.get(item.get("url"))
+                img = Image.open(BytesIO(img_bytes.content))
+            except Exception as e:
+                continue
+
+            prom = getPromedioRGB(img)
+
+            if prom:    
+                f.write(
+                    f'{item.get("url")},{prom}\n'
+                )
+    
+    f.close()
