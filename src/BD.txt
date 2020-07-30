@@ -22,7 +22,6 @@ http://res.cloudinary.com/luispuli2/image/upload/v1595471832/album/rolling-6_xeu
 http://res.cloudinary.com/luispuli2/image/upload/v1595471832/album/moody_gsam1u.jpg,101,83,83
 http://res.cloudinary.com/luispuli2/image/upload/v1595471832/album/Taken-Away_k7dxqn.jpg,72,73,71
 http://res.cloudinary.com/luispuli2/image/upload/v1595471832/album/queen-3_dgxe1c.jpg,229,212,196
-http://res.cloudinary.com/luispuli2/image/upload/v1595471832/album/led-7_mtm8ne.jpg,166,159,151
 http://res.cloudinary.com/luispuli2/image/upload/v1595471832/album/pink-7_wpjbmo.jpg,76,94,104
 http://res.cloudinary.com/luispuli2/image/upload/v1595471832/album/led-5_jgqotb.jpg,52,48,54
 http://res.cloudinary.com/luispuli2/image/upload/v1595471831/album/circles_rqy6gk.jpg,207,207,207
@@ -116,3 +115,4 @@ http://res.cloudinary.com/luispuli2/image/upload/v1595471822/album/beatles-13_fs
 http://res.cloudinary.com/luispuli2/image/upload/v1595471822/album/bad_ht6moy.jpg,50,41,42
 http://res.cloudinary.com/luispuli2/image/upload/v1595471822/album/soda_at49uu.jpg,158,148,137
 http://res.cloudinary.com/luispuli2/image/upload/v1595471822/album/pink-8_kpkz9h.jpg,26,22,32
+http://res.cloudinary.com/luispuli2/image/upload/v1595471832/album/led-7_mtm8ne.jpg,166,159,151

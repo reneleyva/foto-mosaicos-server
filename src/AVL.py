@@ -493,8 +493,8 @@ class AVLTree():
         # Comparaciones solamente.
 
     # Lee la "base de datos" de las imagenes, y genera su árbol de rangos.
-    def fillImageDB (self,size):
-        images = []
+    def fillImageDB (self,sizes):
+        points = []
 
         BD = "./src/BD.txt" #TODO: Replace it!
 
@@ -509,10 +509,12 @@ class AVLTree():
             B = int(arr[3])
             response = requests.get(nombre)
             img = Image.open(BytesIO(response.content))
-            img = img.resize((size,size))
-            RGB = (R,G,B,nombre,img)
+            images = {}
+            for size in sizes:
+                images[size] = img.resize((size,size))
+            RGB = (R,G,B,images)
             # Lo metemos a la lista
-            images.append(RGB)
+            points.append(RGB)
         file.close()
         # Creamos el árbol.
-        self.fillTree(images)
+        self.fillTree(points)
