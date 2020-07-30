@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Foto Mosaico</title>
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href= "{{ url_for('static',filename='css/materialize.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href= "{{ url_for('static',filename='css/style.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <div class="container">
+    <div class="section row">
+
+      <form action="/fill_db" method="get" enctype="multipart/form-data">
+        <div class="input-field col s6">
+            <input id="path" type="text" name="path" required>
+            <label class="active" for="path">Ingresa la ruta de las imágenes </label>
+        </div>
+        <div class="col s2">
+            <button class="waves-effect waves-light btn" type="submit" value="upload" style="margin-top: 25px;"> OK </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="{{ url_for('static',filename='js/materialize.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/init.js') }}"></script>
+
+  </body>
+</html>
