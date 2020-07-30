@@ -1,34 +1,35 @@
 # coding=utf-8
 from PIL import Image
 import os
-from .MinHeap import Heap
 from .AVL import AVLTree
 import random
 
 # Dado un color promedio, regresa la ruta de la imagen cuyo color promedio es el más cercano a ese color.
-def getClosestImage (RGB,tree):
+def getClosestImage (RGB,tree, size):
     epsilon = 2
     # Las imagenes más cercanas
     nearest_points = tree.getNearestPoints(formatt(RGB,epsilon))
+
     # Si no encontramos nada, ampliamos el rango de búsqueda.
-    while not nearest_points or len(nearest_points) < 5: # Podría ser longitud < 2.
+    while not nearest_points or len(nearest_points) < 5:
         # Duplicamos el tamaño.
         epsilon *= 2
         nearest_points = tree.getNearestPoints(formatt(RGB,epsilon))
+    
     points = []
+
     for i in range(len(nearest_points)):
         # Los colores
-        RGB2 = nearest_points[i][:-2]
-        # La ruta
-        name = nearest_points[i][-2]
-        img = nearest_points[i][-1]
+        RGB2 = nearest_points[i][:-1]
+        img = nearest_points[i][-1][size]
         # Sacamos la distancia del punto actual, con el que buscamos.
         distance = getDistance(RGB,RGB2)
-        points.append([distance,name,img])
-    # Metemos los puntos a un montículo mínimo
-    heap = Heap(points)
+        points.append([distance,img])
+
     # Lo regresamos a lista y regresamos los primeros n elementos (los mejores.)
-    return heap.getNSmallest()
+    points.sort(key=lambda point : point[0])
+    
+    return points
 
 # Dados dos colores en RGB regresa su distancia.
 def getDistance (RGB1,RGB2):
@@ -110,11 +111,11 @@ def filtroMosaico(imagen,tree,mosaic_size):
                 # Actualizamos el valor del nuevo color
                 old_RGB = RGB
                 # Regresa el arreglo con las imágenes más cercanas.
-                heap = getClosestImage(RGB,tree)
+                heap = getClosestImage(RGB,tree, mosaic_size)
             # Elegimos una posición aleatoria de nuestro arreglo.
-            index = random.randint(0,3) # len(heap)-1)
+            index = random.randint(0, 3)#len(heap)-1)
             # Lo pegamos al mosaico
-            img = heap[index][2]
+            img = heap[index][1]
             new_im.paste(img, (i,j))
 
     path = "./src/result.jpg"

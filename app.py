@@ -21,34 +21,28 @@ import os
 
 app = Flask(__name__)
 
-AVAILABLE_SIZES = [5,10,15,20,25]
+AVAILABLE_SIZES = [5,10,12,15,18,20,25]
 
-TREES = []
-
-for size in AVAILABLE_SIZES:
-
-    tree = AVLTree()
-    tree.fillImageDB(size)
-
-    TREES.append((size, tree))
+tree = AVLTree()
+tree.fillImageDB(AVAILABLE_SIZES)
 
 @app.route('/home')
 def form():
     return render_template('index.html')
 
-def get_tree(size):
+def get_size(size):
     x,y = size
 
     total_size = x*y
 
-    mosaic_size = .015*total_size**.5
+    mosaic_size = (.010*total_size)**.5
 
     count = 0
 
     while count < (len(AVAILABLE_SIZES) - 1) and mosaic_size > AVAILABLE_SIZES[count]:
         count += 1
 
-    return TREES[count]
+    return AVAILABLE_SIZES[count]
 
 
 @app.route('/upload', methods=['POST'])
@@ -56,7 +50,7 @@ def upload_file():
     if request.method == 'POST':
         photo = request.files['photo']
        	im = Image.open(BytesIO(photo.read()))
-        size, tree = get_tree(im.size)
+        size = get_size(im.size)
         process_image(im, tree, size)
         new_im = open('/home/luis/Documents/foto-mosaicos-server/src/result.jpg','rb')
         tempFileObj = NamedTemporaryFile(mode='w+b',suffix='jpg')
