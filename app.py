@@ -24,7 +24,7 @@ app = Flask(__name__)
 AVAILABLE_SIZES = [5,10,12,15,18,20,25]
 
 tree = AVLTree()
-tree.fillImageDB(AVAILABLE_SIZES)
+# tree.fillImageDB(AVAILABLE_SIZES)
 
 @app.route('/home')
 def form():
@@ -68,6 +68,11 @@ def fill_db():
 @app.route('/', methods=['GET'])
 def home():
     return render_template('home.html')
+
+
+@app.route('/template', methods=['GET'])
+def template():
+    return render_template('template.html')
 
 
 
